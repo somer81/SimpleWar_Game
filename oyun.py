@@ -1,21 +1,20 @@
-from os import system
-from random import randint
+from os import system  # System kutuphanesi ekranlari temizleyebilmek icin cls
+from random import randint  # rastgele sayi ureten sinif eklenir
 
 class Silah:
     def __init__(self, isim:str, demage:int):
         self.__demage = demage
         self.__isim = isim
 
-    def vur(self, rakip):
+    def vur(self, rakip):  # Dusman yada oyuncu her kim vurulursa ondan can eksilir, vurma gucu 1 duser
         rakip.setCan(rakip.getCan() - self.__demage)
         self.__demage -= 1
 
     def getIsim(self):
         return self.__isim
 
-    def getDemage(self):
+    def getDemage(self):   # Mevcut kalan zarar verebilme gucunu gosterir
         return self.__demage
-
 
 class Karakter:
     def __init__(self, can: int, silah: Silah):
@@ -41,23 +40,33 @@ class Dusman(Karakter):
     pass
 
 class Oyuncu(Karakter):
-    #def __int__(self, can:int, silah:Silah):
+    #def __int__(self, isim:str, can:int, silah:Silah):
     #    super().__init__(can, silah)
         #self.__isim = isim
 
+    def setIsim(self, isim:str):
+        self.__isim = isim
+
     def getIsim(self):
-        return "Omer"
-
-
+        return self.__isim
 
 def Main():
-    dusmanlar = list()
-    for i in range(10):
-        dusmanlar.append(Dusman(randint(30, 50), Silah("Ok", randint(10, 20))))
-    oyuncu = Oyuncu(120, Silah("Tabanca", 25))
+    dusmanlar = list() # dusmanlar icin bir dizi
+    silahlar = ["Ok", "Tabanca", "Roket"]  # {"Ok":10, "Tabanca":20, "Roket":100}  silahlar["Ok"]
+    s = {"Ok":randint(0,10), "Tabanca":randint(20,30), "Roket":randint(30,50)} # Dictionary
+    silah_list = list(s)
+    silah_sec = silah_list[randint(0,len(silah_list)-1)]
+    #print(silah_list[0], str(silah_list[0]))  # sozluk icinde silah ismi ve vurus gucu alabilrim
+
+    for i in range(5):
+        silah_sec = silah_list[randint(0, len(silah_list) - 1)]
+        #dusmanlar.append(Dusman(randint(20, 40), Silah(silahlar[randint(0,len(silahlar)-1)], randint(10, 20))))
+        dusmanlar.append(Dusman(randint(20, 40), Silah(str(silah_sec), s[str(silah_sec)])))
+    oyuncu = Oyuncu(80, Silah("Tabanca", 45))
+    oyuncu.setIsim("Omer")
     #oyuncu = Oyuncu()
     while True:
-        system("cls")
+        system("cls")  # python kodu icersinden konsolu temizler
         print("Oyuncu {}    ----    Can {}    ----    Silah {}    ----    Demage {}".format(oyuncu.getIsim(), oyuncu.getCan(), oyuncu.getSilahIsim(), oyuncu.getDemage()))
         print("=============================================================================")
 
@@ -69,7 +78,7 @@ def Main():
         oyuncu.vur(dusman)
         if dusman.getCan() <= 0:
             dusmanlar.remove(dusman)
-            if not dusmanlar:
+            if not dusmanlar:  # eger dusmanlar listesinde hic dusman kalmamissa
                 print("You Win!")
                 break
 
@@ -79,9 +88,9 @@ def Main():
                 print("Game Over")
                 break
 
-
 if __name__ == "__main__":
     Main()
+
 
 
 
